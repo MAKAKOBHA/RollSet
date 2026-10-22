@@ -1,0 +1,409 @@
+/* Карты: плитки выбора, переворот, заглушки на случай отсутствия картинок. */
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(92px, 26vw, 150px), 1fr));
+  gap: clamp(10px, 2.4vw, 20px);
+}
+
+/* ---------- Изображение карты ---------- */
+
+.art {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.art img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  -webkit-user-drag: none;
+  user-select: none;
+  transition: opacity 0.35s ease;
+}
+
+.art.is-loading img {
+  opacity: 0;
+}
+
+.art.is-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgb(255 255 255 / 0.07) 50%, transparent 80%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s linear infinite;
+}
+
+.art.is-missing img {
+  display: none;
+}
+
+.art-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 8%;
+  border: 2px solid var(--line);
+  border-radius: inherit;
+  background: repeating-linear-gradient(45deg, #14110a 0 10px, #0e0c07 10px 20px);
+  color: var(--muted);
+  font-family: var(--font-display);
+  text-align: center;
+}
+
+.art.is-missing .art-fallback {
+  display: flex;
+}
+
+.art-number {
+  font-size: clamp(1.6rem, 6vw, 2.6rem);
+  font-weight: 700;
+  opacity: 0.55;
+}
+
+.art-fallback-face {
+  justify-content: flex-start;
+  border-color: var(--accent);
+  background: linear-gradient(180deg, #1c1608, #0c0a04);
+  color: var(--text);
+}
+
+/* заглушки карт: названия строчными, а в шрифте заголовков строчных русских букв нет */
+.art-title {
+  font-family: var(--font-body);
+  font-size: clamp(0.85rem, 2.6vw, 1.15rem);
+  line-height: 1.2;
+}
+
+.mods {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 400 clamp(0.55rem, 1.9vw, 0.75rem) / 1.55 var(--font-body);
+}
+
+.mods li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5em;
+}
+
+/* ---------- Плитка выбора ---------- */
+
+.tile {
+  appearance: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform 0.28s var(--ease),
+    opacity 0.28s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tile.is-static {
+  cursor: default;
+}
+
+.tile .art {
+  aspect-ratio: var(--card-ratio);
+  box-shadow: 0 5px 16px rgb(0 0 0 / 0.45);
+  transition: box-shadow 0.28s var(--ease);
+}
+
+@media (hover: hover) {
+  .tile:not(.is-static):hover {
+    transform: scale(1.03);
+  }
+
+  .tile:not(.is-static):hover .art {
+    box-shadow: 0 0 0 1px rgb(255 210 63 / 0.55), 0 0 16px rgb(255 210 63 / 0.25);
+  }
+}
+
+/* Выбранная карта: небольшое увеличение и жёлтая подсветка */
+.tile.is-selected {
+  z-index: 1;
+  transform: scale(1.07);
+}
+
+.tile.is-selected .art,
+.tile.is-selected.is-fate .art {
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 22px 2px rgb(255 210 63 / 0.6),
+    0 0 52px rgb(255 210 63 / 0.28);
+}
+
+.tile.is-dim {
+  opacity: 0.55;
+}
+
+.tile.deal {
+  animation: card-deal 0.6s var(--ease) both;
+  animation-delay: calc(var(--i, 0) * 160ms);
+}
+
+/* ---------- Переворот ---------- */
+
+.flip {
+  perspective: 1400px;
+}
+
+.flip.is-flipped {
+  animation: flip-lift var(--flip-ms) var(--ease);
+}
+
+.flip-inner {
+  position: relative;
+  aspect-ratio: var(--card-ratio);
+  transform-style: preserve-3d;
+  transition: transform var(--flip-ms) var(--ease);
+}
+
+.flip.is-flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 26px rgb(0 0 0 / 0.55);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-face .art {
+  height: 100%;
+  border-radius: inherit;
+}
+
+.flip-front {
+  transform: rotateY(180deg);
+}
+
+/* Расклад карт: падают сверху по очереди, с поворотом и лёгким отскоком */
+.tile.is-dealing {
+  z-index: 2;
+  pointer-events: none;
+  animation: tile-drop var(--deal-ms, 900ms) cubic-bezier(0.25, 0.7, 0.3, 1) backwards;
+  animation-delay: calc(var(--di, 0) * var(--deal-step, 80ms));
+}
+
+/* ---------- Выбор карт: 9 столбцов × 3 ряда, всё на одном экране ---------- */
+/* Только для широких экранов в альбомной ориентации. На узких экранах остаётся прежняя сетка с прокруткой. */
+
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  body:is([data-phase="choose"], [data-phase="fate"], [data-phase="confirm"]) {
+    height: 100dvh;
+  }
+
+  body:is([data-phase="choose"], [data-phase="fate"], [data-phase="confirm"]) .footer,
+  body:is([data-phase="choose"], [data-phase="fate"], [data-phase="confirm"]) .notices {
+    display: none;
+  }
+
+  body:is([data-phase="choose"], [data-phase="fate"], [data-phase="confirm"]) .topbar {
+    padding-block: 8px;
+  }
+
+  body:is([data-phase="choose"], [data-phase="fate"], [data-phase="confirm"]) main {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    max-width: none;
+    padding: 0 clamp(10px, 1.6vw, 28px) 14px; /* запас под увеличение выбранной карты в нижнем ряду */
+  }
+
+  .screen[data-screen="choose"] {
+    flex: 1;
+    min-height: 0;
+    flex-direction: column;
+  }
+
+  .screen[data-screen="choose"]:not([hidden]) {
+    display: flex;
+  }
+
+  .screen[data-screen="choose"] .choose-head {
+    flex-wrap: nowrap;
+    align-items: baseline;
+    margin: 0 0 8px;
+  }
+
+  .screen[data-screen="choose"] .choose-head h2 {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+
+  .screen[data-screen="choose"] .who {
+    margin: 0;
+  }
+
+  .card-grid {
+    --g: clamp(8px, 1vw, 16px);
+    --tile-extra: 0px; /* подписей под картами нет */
+    flex: 1 1 0;
+    min-height: 330px;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: var(--g);
+    container-type: size;
+  }
+
+  .card-grid .tile {
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* ширина карты = меньшее из: ширина ячейки и высота ячейки (без названия) × пропорция */
+  .card-grid .tile .art {
+    flex: none;
+    width: min(
+      calc((100cqw - 8 * var(--g)) / 9),
+      calc(((100cqh - 2 * var(--g)) / 3 - var(--tile-extra)) * var(--card-num))
+    );
+  }
+
+  /* нижняя панель: в потоке страницы, а не поверх карт */
+  .screen[data-screen="choose"] .action-bar {
+    position: static;
+    margin: 8px 0 0;
+    padding: 0;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ---------- Выбор карт: заголовок, счётчик и кнопки в одной верхней строке ---------- */
+/* Освобождает высоту под карты. Только для широких окон; на более узких остаётся строка кнопок внизу. */
+
+@media (min-width: 1200px) and (min-aspect-ratio: 1/1) {
+  .screen[data-screen="choose"]:not([hidden]) {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: clamp(14px, 2vw, 32px);
+    row-gap: 8px;
+  }
+
+  .screen[data-screen="choose"] .choose-head,
+  .screen[data-screen="choose"] .action-bar {
+    display: contents;
+  }
+
+  .screen[data-screen="choose"] .choose-head h2 {
+    grid-area: 1 / 1;
+  }
+
+  .screen[data-screen="choose"] .who {
+    grid-area: 1 / 2;
+  }
+
+  .screen[data-screen="choose"] .counter-wrap {
+    grid-area: 1 / 3;
+    min-width: 0;
+  }
+
+  .screen[data-screen="choose"] .counter-hint {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .screen[data-screen="choose"] .action-buttons {
+    grid-area: 1 / 4;
+    flex-wrap: nowrap;
+  }
+
+  .screen[data-screen="choose"] .card-grid {
+    grid-area: 2 / 1 / 3 / -1;
+    align-self: stretch; /* без этого блок схлопывается: у него размерная изоляция (container-type: size) */
+    min-height: 0;
+  }
+}
+
+/* ---------- «Живые» карты: можно взять и поводить ---------- */
+
+.tile,
+.flip {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.tile:not(.is-static),
+.flip {
+  cursor: grab;
+}
+
+.tile.is-dragging,
+.flip.is-dragging {
+  position: relative;
+  z-index: 80 !important;
+  cursor: grabbing;
+}
+
+.is-dragging .art,
+.is-dragging .flip-face {
+  box-shadow: 0 22px 40px rgb(0 0 0 / 0.65);
+}
+
+/* ---------- Пасхалка: карта в руке переворачивается лицом ---------- */
+
+.tile > .art {
+  transition:
+    box-shadow 0.28s var(--ease),
+    transform 0.16s ease-in 0.16s; /* возврат на рубашку: после того как лицо спряталось */
+}
+
+.tile-face {
+  position: absolute;
+  inset: 0 0 auto 0;
+  aspect-ratio: var(--card-ratio);
+  pointer-events: none;
+  transform: perspective(900px) rotateY(-90deg);
+  transition: transform 0.16s ease-out;
+}
+
+.tile-face .art {
+  height: 100%;
+  box-shadow: 0 0 0 2px var(--accent), 0 0 30px rgb(255 210 63 / 0.5);
+}
+
+.tile.is-peek > .art {
+  transform: perspective(900px) rotateY(90deg);
+  transition-delay: 0s;
+}
+
+.tile.is-peek .tile-face {
+  transform: perspective(900px) rotateY(0);
+  transition-delay: 0.16s;
+}

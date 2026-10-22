@@ -1,0 +1,634 @@
+/* Кнопки, поля, диалоги, уведомления, таблица навыков, результат. */
+
+/* ---------- Кнопки ---------- */
+
+.btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: 48px;
+  padding: 0.8em 1.5em;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: 600 1rem/1.15 var(--font-body);
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition:
+    transform 0.2s var(--ease),
+    background-color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.25s,
+    opacity 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .btn:not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+}
+
+.btn:not(:disabled):active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 8px 22px rgb(255 210 63 / 0.3);
+}
+
+@media (hover: hover) {
+  .btn-primary:not(:disabled):hover {
+    box-shadow: 0 12px 28px rgb(255 210 63 / 0.5);
+  }
+}
+
+.btn-ghost {
+  border-color: var(--line);
+  background: transparent;
+}
+
+@media (hover: hover) {
+  .btn-ghost:not(:disabled):hover {
+    border-color: var(--muted);
+  }
+}
+
+.btn-fate {
+  border-color: var(--accent);
+  background: transparent;
+  color: var(--accent);
+  box-shadow: 0 0 20px rgb(255 210 63 / 0.18), inset 0 0 14px rgb(255 210 63 / 0.1);
+}
+
+.btn.is-busy {
+  color: transparent;
+  pointer-events: none;
+}
+
+.btn.is-busy::after {
+  content: "";
+  position: absolute;
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid rgb(0 0 0 / 0.25);
+  border-top-color: var(--accent-ink);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.link {
+  appearance: none;
+  padding: 4px;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 1.5em;
+}
+
+.actions-center {
+  justify-content: center;
+}
+
+.actions-col {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* ---------- Поля ---------- */
+
+.field {
+  display: block;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 0.4em;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.field input {
+  width: 100%;
+  min-height: 56px;
+  padding: 0.6em 1em;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--text);
+  font: 400 1.35rem var(--font-body);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.field input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 4px rgb(255 210 63 / 0.25);
+}
+
+.field input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.field-hint {
+  margin: 0.5em 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.field-error {
+  min-height: 1.5em;
+  margin: 0.3em 0 0;
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+/* ---------- Текст механики, уведомления ---------- */
+
+.prose p {
+  max-width: 38em;
+  color: #f0c63c;
+}
+
+.notices {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.notice {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: #f0c63c;
+  font-size: 0.88rem;
+  animation: screen-in 0.4s var(--ease) both;
+}
+
+.notice-warn {
+  border-left-color: var(--danger);
+}
+
+.badge {
+  padding: 0.25em 0.8em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+.badge-test {
+  border-color: #7a6118;
+  color: var(--accent);
+}
+
+.fatal ul {
+  padding-left: 1.2em;
+  color: var(--danger);
+}
+
+.fatal ul.plain {
+  color: inherit;
+}
+
+.fatal ul.plain li {
+  margin: 0.4em 0;
+}
+
+/* ---------- Экран выбора ---------- */
+
+.choose-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 24px;
+  margin-bottom: 14px;
+}
+
+.choose-head p {
+  margin-bottom: 0.4em;
+}
+
+.who {
+  white-space: nowrap;
+}
+
+.picked-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  min-height: 44px;
+  padding: 6px 12px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-size: 0.88rem;
+  transition:
+    border-color 0.25s,
+    background-color 0.25s,
+    color 0.25s;
+}
+
+.slot.is-filled {
+  border-style: solid;
+  border-color: var(--accent);
+  background: rgb(255 210 63 / 0.08);
+  color: var(--text);
+}
+
+.slot.is-fate {
+  border-color: var(--fate);
+  background: rgb(255 226 122 / 0.1);
+}
+
+.slot-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.num-badge {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 1.8em;
+  height: 1.8em;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text);
+  font: 600 0.85rem var(--font-body);
+}
+
+.action-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 18px;
+  margin: 22px calc(var(--gutter) * -1) 0;
+  padding: 14px var(--gutter) calc(14px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgb(0 0 0 / 0), rgb(0 0 0 / 0.95) 30%);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.counter {
+  margin: 0;
+  font: 700 1.1rem var(--font-body); /* цифры читаются лучше обычным шрифтом */
+}
+
+.counter.is-full {
+  color: var(--accent);
+}
+
+.counter-hint {
+  min-height: 1.3em;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .action-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-buttons {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .action-buttons .btn {
+    flex: 1 1 0;
+    min-height: 46px;
+    padding: 0.6em 0.8em;
+    font-size: 0.88rem;
+  }
+
+  .counter-hint {
+    display: none;
+  }
+
+  .picked-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Диалоги ---------- */
+
+dialog {
+  overflow: visible; /* карты в окне можно таскать за его пределы */
+  width: min(92vw, 580px);
+  max-height: 92dvh;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.85);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+dialog[open] {
+  animation: dialog-in 0.32s var(--ease) both;
+}
+
+dialog[open]::backdrop {
+  animation: fade-in 0.32s ease both;
+}
+
+.dialog-body {
+  padding: clamp(18px, 4vw, 30px);
+}
+
+.dialog-body .actions {
+  margin-top: 1.2em;
+}
+
+.mini-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 1em 0 1.2em;
+}
+
+/* ---------- Раскрытие, таблица навыков ---------- */
+
+.stage-eyebrow,
+.stage-title {
+  text-align: center;
+}
+
+.stage-title {
+  margin-bottom: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+.reveal-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 3vw, 28px);
+  max-width: 780px;
+  margin: 0 auto 28px;
+}
+
+.tally {
+  max-width: 780px;
+  margin: 0 auto 24px;
+  animation: screen-in 0.9s var(--ease) both;
+}
+
+.skills-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.skills-table th,
+.skills-table td {
+  padding: 0.55em 0.4em;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.skills-table th:first-child {
+  text-align: left;
+}
+
+.skills-table thead th {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.skills-table tbody th {
+  font-weight: 600;
+}
+
+.skills-table tbody tr {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.skills-table tbody tr.is-in {
+  opacity: 1;
+}
+
+.skills-table .derived-row th,
+.skills-table .derived-row td {
+  border-top: 0;
+}
+
+.skills-table .derived-row:first-of-type th,
+.skills-table .derived-row:first-of-type td {
+  border-top: 2px solid var(--line);
+}
+
+.cell-formula {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.cell-total.derived {
+  color: var(--accent);
+}
+
+.cell-mod {
+  font-size: 0.95rem;
+}
+
+.cell-total {
+  font: 700 1.5rem var(--font-body); /* цифры Brighton легко спутать (0 похож на 8) */
+}
+
+.cell-total.pop {
+  animation: pop 0.4s var(--ease);
+}
+
+.pos {
+  color: var(--ok);
+}
+
+.neg {
+  color: var(--danger);
+}
+
+.zero {
+  color: var(--muted);
+}
+
+@media (max-width: 480px) {
+  .skills-table th,
+  .skills-table td {
+    padding: 0.5em 0.2em;
+  }
+
+  .cell-total {
+    font-size: 1.3rem;
+  }
+}
+
+/* ---------- Результат ---------- */
+
+.result {
+  max-width: 880px;
+  margin: 0 auto;
+  animation: result-in 1s var(--ease) both;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) 1fr;
+  align-items: start;
+  gap: clamp(18px, 4vw, 40px);
+}
+
+.sheet-preview canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 16px 44px rgb(0 0 0 / 0.55);
+}
+
+.export-status {
+  min-height: 1.6em;
+  margin-top: 1em;
+  color: var(--ok);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 720px) {
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet-preview {
+    max-width: 340px;
+    margin: 0 auto;
+  }
+}
+
+/* ---------- Начальный экран и механика ---------- */
+
+.btn-lg {
+  min-height: 60px;
+  padding: 0.8em 3.2em;
+  font-size: 1.3rem;
+}
+
+.hero .actions {
+  margin-top: 2em;
+}
+
+.rules-screen {
+  max-width: 800px;
+  margin: 4vh auto 0;
+}
+
+.rules-title {
+  margin-bottom: 0.8em;
+  text-align: center;
+}
+
+/* текст по ширине: компактнее, и помещается больше */
+.rules-lines p {
+  margin: 0 0 0.8em;
+  color: #f0c63c;
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  line-height: 1.5;
+  text-align: justify;
+  text-align-last: left;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.rules-next {
+  margin-top: 1.6em;
+  min-height: 60px;
+}
+
+/* Строки механики проявляются по очереди (задержка --d задаётся из кода) */
+.fade-line {
+  opacity: 0;
+  animation: line-in var(--line-ms, 1100ms) ease forwards;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Кнопка «пропустить» внизу, как на заставке */
+.skip-hint {
+  appearance: none;
+  position: fixed;
+  right: 18px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 20;
+  padding: 10px 12px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: 400 0.8rem var(--font-body);
+  opacity: 0.75;
+  cursor: pointer;
+  transition: color 0.2s, opacity 0.2s;
+}
+
+.skip-hint:hover {
+  color: var(--accent);
+  opacity: 1;
+}

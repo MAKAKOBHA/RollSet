@@ -1,0 +1,98 @@
+/* Заставка на чёрном фоне. Длительность задаётся из js/config.js через --splash-ms. */
+
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+  transition: opacity var(--splash-out-ms, 600ms) ease;
+}
+
+html.has-splash #splash {
+  display: flex;
+}
+
+#splash.is-leaving {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#splash.is-done {
+  display: none !important;
+}
+
+#splash-img {
+  display: block;
+  max-width: min(86vw, 900px);
+  max-height: 78vh;
+  object-fit: contain;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+#splash.is-playing #splash-img {
+  animation: splash-img var(--splash-ms, 5000ms) cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
+}
+
+/* Запасной вариант, если картинки нет */
+.splash-title {
+  display: none;
+  color: var(--accent);
+  font: 400 clamp(2.6rem, 12vw, 6rem) var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 40px rgb(255 210 63 / 0.45);
+  opacity: 0;
+}
+
+#splash.is-missing #splash-img {
+  display: none;
+}
+
+#splash.is-missing .splash-title {
+  display: block;
+}
+
+#splash.is-missing.is-playing .splash-title {
+  animation: splash-img var(--splash-ms, 5000ms) cubic-bezier(0.25, 0.6, 0.3, 1) forwards;
+}
+
+.splash-skip {
+  position: absolute;
+  right: 18px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  color: var(--muted);
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+/* Пока идёт заставка, страница под ней скрыта и плавно проявляется в конце */
+html.has-splash:not(.splash-done) .topbar,
+html.has-splash:not(.splash-done) main,
+html.has-splash:not(.splash-done) .footer {
+  opacity: 0;
+}
+
+html.has-splash .topbar,
+html.has-splash main,
+html.has-splash .footer {
+  transition: opacity 0.7s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #splash.is-playing #splash-img,
+  #splash.is-missing.is-playing .splash-title {
+    animation: splash-img-static 0.01ms forwards;
+  }
+}
+
+@keyframes splash-img-static {
+  to {
+    opacity: 1;
+  }
+}

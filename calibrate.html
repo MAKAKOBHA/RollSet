@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RollSet — калибровка листа</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/calibrate.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-name">RollSet</span><span class="brand-game">калибровка листа</span></div>
+    <a class="link" href="index.html">← к приложению</a>
+  </header>
+
+  <section class="panel fatal" id="file-warning" role="alert" hidden style="margin:12px var(--gutter)">
+    <h2>Страницу нужно открывать через локальный сервер</h2>
+    <p>Дважды щёлкните <code>start-calibrate-windows.bat</code> (macOS / Linux: <code>start-calibrate-mac-linux.command</code>) в папке проекта.</p>
+  </section>
+
+  <main class="cal">
+    <section class="cal-stage">
+      <p class="muted small" id="cal-status">Загрузка листа…</p>
+      <div class="cal-canvas-wrap" id="wrap">
+        <canvas id="cal-canvas"></canvas>
+        <div class="cal-boxes" id="boxes"></div>
+      </div>
+    </section>
+
+    <aside class="cal-side">
+      <div class="panel">
+        <h2>Как пользоваться</h2>
+        <ol class="small muted">
+          <li>Положите лист в <code>Assets/Sheet/character-sheet.png</code> (2480×3508).</li>
+          <li>Перетащите рамку на нужное поле, потяните угол — размер.</li>
+          <li>Тонкая подгонка — числами ниже. Стрелки на клавиатуре двигают выбранную рамку (Shift — быстрее).</li>
+          <li>Скопируйте код и вставьте в <code>js/data/sheet-layout.js</code> вместо <code>LAYOUT</code>.</li>
+        </ol>
+      </div>
+
+      <div class="panel" id="props">
+        <h3 id="p-title">Поле не выбрано</h3>
+        <div class="props-grid">
+          <label>x <input type="number" id="p-x" step="1"></label>
+          <label>y <input type="number" id="p-y" step="1"></label>
+          <label>w <input type="number" id="p-w" step="1" min="1"></label>
+          <label>h <input type="number" id="p-h" step="1" min="1"></label>
+          <label>maxFont <input type="number" id="p-maxFont" step="1" min="1"></label>
+          <label>minFont <input type="number" id="p-minFont" step="1" min="1"></label>
+          <label>maxLines <input type="number" id="p-maxLines" step="1" min="1"></label>
+          <label>align
+            <select id="p-align"><option>left</option><option>center</option><option>right</option></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Пробный текст</h3>
+        <label class="field"><span class="field-label">Имя</span><input id="t-name" type="text" value="Александр Македонский" style="font-size:1rem;min-height:44px"></label>
+        <label class="field"><span class="field-label">Архетип (во все три)</span><input id="t-arch" type="text" value="Хранитель забытых дорог" style="font-size:1rem;min-height:44px"></label>
+        <label class="field"><span class="field-label">Число навыков</span>
+          <select id="t-num"><option value="3">+3</option><option value="-2">-2</option><option value="0">0</option><option value="12">+12</option></select>
+        </label>
+        <p class="small muted" id="font-test"></p>
+      </div>
+
+      <div class="panel">
+        <h3>Код для sheet-layout.js</h3>
+        <textarea id="out" readonly spellcheck="false" rows="12"></textarea>
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="copy">Скопировать</button>
+          <button type="button" class="btn btn-ghost" id="reset">Сбросить правки</button>
+        </div>
+        <p class="export-status" id="copy-status" role="status"></p>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    if (location.protocol === 'file:') {
+      document.getElementById('file-warning').hidden = false;
+      document.querySelector('main').hidden = true;
+    }
+  </script>
+  <script type="module" src="js/calibrate.js"></script>
+</body>
+</html>
