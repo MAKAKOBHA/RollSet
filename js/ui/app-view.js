@@ -41,6 +41,12 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
   $('#name-form').addEventListener('submit', (event) => {
     event.preventDefault();
     controller.submitName();
+    // Начинаем звук раскладывания непосредственно после успешного подтверждения имени.
+    if (controller.getState().phase === P.CHOOSE) {
+      sound.unlock();
+      // После формы звук уже запущен; при других переходах к выбору запускаем здесь.
+      if (previous !== 'name') sound.play('deal');
+    }
   });
 
   // --- Кнопки ---

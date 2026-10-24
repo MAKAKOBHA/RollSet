@@ -117,6 +117,12 @@ export function createStageView({ root, cards, skills, controller, sheetService,
     // Ждём, пока финальный экран плавно проявится, картинки лиц (но не дольше 8 секунд) и паузу.
     await screenShown;
     await Promise.all([Promise.race([Promise.all(flips.map((f) => f.ready)), sleep(8000)]), sleep(t(anim.introPauseMs))]);
+    if (!alive()) return;
+    // Показываем скрытые лицевые 3D-слои только после появления экрана.
+    // Два кадра дают Chromium завершить композитинг до начала переворота.
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    if (!alive()) return;
+    flips.forEach((flip) => flip.root.classList.add('is-flip-ready'));
 
     for (let i = 0; i < flips.length; i += 1) {
       if (!alive()) return;
