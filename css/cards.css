@@ -215,6 +215,11 @@
 
 .flip-front {
   transform: rotateY(180deg) translateZ(0.1px);
+  visibility: hidden;
+}
+
+.flip.is-flip-ready .flip-front {
+  visibility: visible;
 }
 
 /* Расклад карт: падают сверху по очереди, с поворотом и лёгким отскоком */
