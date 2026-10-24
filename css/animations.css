@@ -43,15 +43,16 @@
     transform var(--out-ms, 1000ms) ease-in-out;
 }
 
-.screen.is-slow-in {
-  animation: screen-in-slow var(--in-ms, 1200ms) cubic-bezier(0.33, 0, 0.2, 1) both;
+/* На финальном экране внутри находятся 3D-карты. Анимирование transform
+   на их родительском экране заставляет Chromium пересобирать 3D-слои и может
+   давать кратковременное мерцание. Проявляем экран только через opacity. */
+.screen[data-screen="stage"].is-slow-in {
+  animation: stage-fade-in var(--in-ms, 1200ms) ease-in-out both;
 }
 
-@keyframes screen-in-slow {
-  from {
-    opacity: 0;
-    transform: translateY(24px) scale(0.99);
-  }
+@keyframes stage-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes result-in {
