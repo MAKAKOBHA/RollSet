@@ -3,6 +3,7 @@
 /* ---------- Кнопки ---------- */
 
 .btn {
+  text-decoration: none;
   appearance: none;
   display: inline-flex;
   align-items: center;
