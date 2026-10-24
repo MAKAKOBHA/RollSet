@@ -218,7 +218,7 @@
   visibility: hidden;
 }
 
-.flip.is-flip-ready .flip-front {
+.flip.is-flipped .flip-front {
   visibility: visible;
 }
 
