@@ -54,6 +54,8 @@ def update_references():
             return asset_path + ".webp"
 
         updated = REFERENCE_RE.sub(replace, text)
+        if path.relative_to(ROOT).as_posix() == "js/config.js":
+            updated = updated.replace("cardFileExt: 'png'", "cardFileExt: 'webp'")
         if updated != text:
             path.write_text(updated, encoding="utf-8", newline="")
             changed.append(path.relative_to(ROOT).as_posix())
