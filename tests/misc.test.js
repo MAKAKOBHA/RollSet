@@ -15,9 +15,9 @@ test('имя файла сохраняет кириллицу и убирает 
   assert.ok([...slugifyName('а'.repeat(100))].length <= 40);
 });
 
-test('пути к картинкам: Assets/Backs/NN.png и Assets/Faces/NN.png', () => {
-  assert.equal(cardImagePath(CONFIG, 'back', CARDS[0]), 'Assets/Backs/01.png');
-  assert.equal(cardImagePath(CONFIG, 'face', CARDS[26]), 'Assets/Faces/27.png');
+test('пути к картинкам: Assets/Backs/NN.webp и Assets/Faces/NN.webp', () => {
+  assert.equal(cardImagePath(CONFIG, 'back', CARDS[0]), 'Assets/Backs/01.webp');
+  assert.equal(cardImagePath(CONFIG, 'face', CARDS[26]), 'Assets/Faces/27.webp');
   assert.equal(sheetPath(CONFIG), 'Assets/Sheet/character-sheet.png');
 });
 

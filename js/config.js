@@ -6,7 +6,7 @@ export const CONFIG = Object.freeze({
   backsDir: 'Backs',
   facesDir: 'Faces',
   sheetFile: 'Sheet/character-sheet.png',
-  cardFileExt: 'png', // файлы карт называются 01.png … 27.png
+  cardFileExt: 'webp', // файлы карт называются 01.png … 27.png
 
   // --- Правила выбора ---
   cardCount: 27,
@@ -24,7 +24,7 @@ export const CONFIG = Object.freeze({
 
   // --- Вступительная заставка ---
   intro: Object.freeze({
-    file: 'Intro/intro.png', // Assets/Intro/intro.png; нет файла — показывается слово «Glufonde Fracture»
+    file: 'Intro/intro.png', // Assets/Intro/intro.webp; нет файла — показывается слово «Glufonde Fracture»
     durationMs: 5000, // общая длительность, включая затухание
     fadeOutMs: 600,
     loadTimeoutMs: 4000, // сколько ждать загрузку картинки перед стартом

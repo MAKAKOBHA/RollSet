@@ -24,8 +24,8 @@
 
 | Что | Где | Подсказка |
 |---|---|---|
-| Рубашки и лица карт | `Assets/Backs/NN.png`, `Assets/Faces/NN.png` | `NN` = номер карты, двузначный: `01`…`27` |
-| Картинка заставки (5 с) | `Assets/Intro/intro.png` | по желанию; длительность в `js/config.js → intro` |
+| Рубашки и лица карт | `Assets/Backs/NN.webp`, `Assets/Faces/NN.webp` | `NN` = номер карты, двузначный: `01`…`27` |
+| Картинка заставки (5 с) | `Assets/Intro/intro.webp` | по желанию; длительность в `js/config.js → intro` |
 | Лист персонажа | `Assets/Sheet/character-sheet.png` | 2480×3508 |
 | Названия и модификаторы карт | `js/data/cards.js` | `number` пишется без нуля впереди (`1`, а не `01`): иначе сайт не запустится. Файлы при этом называются `01.png` |
 | Описание механики | `js/data/mechanics.js` | поставить `isPlaceholder: false` |

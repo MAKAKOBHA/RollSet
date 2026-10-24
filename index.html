@@ -28,7 +28,7 @@
         <rect width="32" height="32" rx="7" fill="currentColor"/>
         <g fill="#1a1308"><circle cx="10" cy="10" r="2.6"/><circle cx="22" cy="10" r="2.6"/><circle cx="16" cy="16" r="2.6"/><circle cx="10" cy="22" r="2.6"/><circle cx="22" cy="22" r="2.6"/></g>
       </svg>
-      <img class="brand-logo" src="Assets/Logo/logo.png" alt="" hidden onload="this.hidden=false;this.previousElementSibling.setAttribute('hidden','')" onerror="this.remove()">
+      <img class="brand-logo" src="Assets/Logo/logo.webp" alt="" hidden onload="this.hidden=false;this.previousElementSibling.setAttribute('hidden','')" onerror="this.remove()">
       <span class="brand-name">RollSet</span>
     </div>
     <div class="topbar-right">
@@ -208,10 +208,10 @@
 
   <noscript><p class="noscript">Для работы RollSet нужен включённый JavaScript.</p></noscript>
   <script>
-    // Значок вкладки: Assets/Logo/favicon.png, а если его нет, то Assets/Logo/logo.png; иначе остаётся кубик.
+    // Значок вкладки: Assets/Logo/favicon.png, а если его нет, то Assets/Logo/logo.webp; иначе остаётся кубик.
     (function () {
       var icon = document.getElementById('favicon');
-      var candidates = ['Assets/Logo/favicon.png', 'Assets/Logo/logo.png'];
+      var candidates = ['Assets/Logo/favicon.png', 'Assets/Logo/logo.webp'];
       (function next(i) {
         if (!icon || i >= candidates.length || location.protocol === 'file:') return;
         var probe = new Image();
