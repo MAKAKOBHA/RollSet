@@ -104,9 +104,11 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
   const rulesTitle = $('#rules-title');
   const rulesNext = $('#btn-rules-next');
   let rulesTimer = 0;
+  let skipHideTimer = 0;
 
   function playRules() {
     clearTimeout(rulesTimer);
+    clearTimeout(skipHideTimer);
     const { lineFadeMs, lineStepMs } = config.rules;
     const items = [MECHANICS.title, ...MECHANICS.paragraphs];
 
@@ -132,7 +134,13 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
     const total = reduceMotion() ? 0 : (items.length - 1) * lineStepMs + lineFadeMs;
     rulesTimer = setTimeout(() => {
       rulesNext.hidden = false;
-      $('#rules-skip').classList.add('is-fading');
+      const rulesSkip = $('#rules-skip');
+      rulesSkip.classList.add('is-fading');
+      // После плавного исчезновения убираем кнопку из интерфейса полностью,
+      // чтобы она не оставалась поверх подвала ни на компьютере, ни на телефоне.
+      skipHideTimer = setTimeout(() => {
+        if (controller.getState().phase === P.RULES) rulesSkip.hidden = true;
+      }, 750);
       rulesNext.classList.add('fade-line');
       rulesNext.style.setProperty('--d', '0ms');
     }, total);
@@ -204,7 +212,10 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
     const shown = showScreen(target, () => controller.getState().phase);
     syncName(state);
     if (state.phase === P.RULES && prev?.phase !== P.RULES) playRules();
-    if (state.phase !== P.RULES) clearTimeout(rulesTimer);
+    if (state.phase !== P.RULES) {
+      clearTimeout(rulesTimer);
+      clearTimeout(skipHideTimer);
+    }
     $('#rules-skip').hidden = state.phase !== P.RULES;
     chooseView.sync(state);
     dialogs.sync(state, prev);
