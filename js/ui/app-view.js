@@ -46,6 +46,7 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
   // --- Кнопки ---
   const actions = {
     start: () => controller.readRules(),
+    'glufonde-reader': () => window.open('https://makakobha.github.io/Glufonde-Reader/', '_blank', 'noopener,noreferrer'),
     'rules-skip': () => controller.rulesDone(),
     'rules-done': () => controller.rulesDone(),
     'edit-name': () => controller.editName(),
