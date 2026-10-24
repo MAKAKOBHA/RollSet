@@ -1,5 +1,5 @@
 // Вступительная заставка: чёрный фон, картинка проявляется и увеличивается.
-// Картинка: Assets/Intro/intro.png (см. CONFIG.intro). Нет файла — показывается слово «Glufonde Fracture».
+// Картинка: Assets/Intro/intro.webp (см. CONFIG.intro). Нет файла — показывается слово «Glufonde Fracture».
 // Клик, Enter, Пробел или Esc пропускают заставку.
 
 import { assetUrl } from '../core/paths.js';
