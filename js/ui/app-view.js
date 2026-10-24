@@ -80,6 +80,8 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
       if (event.pointerType === 'mouse' && event.button !== 0) return;
       const button = event.target.closest('[data-action]');
       if (!button || button.disabled || button.dataset.action === 'rules-skip') return;
+      // Разблокируем аудиоконтекст до play: иначе первый клик (в том числе «Начать») теряется.
+      sound.unlock();
       sound.play('click');
     },
     true,
