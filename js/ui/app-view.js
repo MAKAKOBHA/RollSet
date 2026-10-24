@@ -113,6 +113,7 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
     rulesTitle.textContent = '';
     rulesBody.replaceChildren();
     rulesNext.hidden = true;
+    $('#rules-skip').classList.remove('is-fading');
 
     items.forEach((text, i) => {
       const target = i === 0 ? rulesTitle : rulesBody.appendChild(el('p'));
@@ -131,6 +132,7 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
     const total = reduceMotion() ? 0 : (items.length - 1) * lineStepMs + lineFadeMs;
     rulesTimer = setTimeout(() => {
       rulesNext.hidden = false;
+      $('#rules-skip').classList.add('is-fading');
       rulesNext.classList.add('fade-line');
       rulesNext.style.setProperty('--d', '0ms');
     }, total);

@@ -625,10 +625,24 @@ dialog[open]::backdrop {
   font: 400 0.8rem var(--font-body);
   opacity: 0.75;
   cursor: pointer;
-  transition: color 0.2s, opacity 0.2s;
+  transition: color 0.2s, opacity 0.7s;
+}
+
+.skip-hint.is-fading,
+.skip-hint.is-fading:hover {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .skip-hint:hover {
   color: var(--accent);
   opacity: 1;
+}
+
+
+/* На телефонах кнопка пропуска должна оставаться выше подписи в подвале. */
+@media (max-width: 600px) {
+  .skip-hint {
+    bottom: calc(5.75rem + env(safe-area-inset-bottom));
+  }
 }
