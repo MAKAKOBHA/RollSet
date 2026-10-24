@@ -56,6 +56,7 @@ def update_references():
         updated = REFERENCE_RE.sub(replace, text)
         if path.relative_to(ROOT).as_posix() == "js/config.js":
             updated = updated.replace("cardFileExt: 'png'", "cardFileExt: 'webp'")
+            updated = updated.replace("Intro/intro.png", "Intro/intro.webp")
         if updated != text:
             path.write_text(updated, encoding="utf-8", newline="")
             changed.append(path.relative_to(ROOT).as_posix())
@@ -68,7 +69,11 @@ def main():
             pngs.extend(p for p in folder.rglob("*.png") if p.name.lower() != "favicon.png")
 
     if not pngs:
-        print("No source artwork PNGs found. Nothing to convert.")
+        changed_refs = update_references()
+        print("No source artwork PNGs found.")
+        print(f"Updated source files: {len(changed_refs)}")
+        for path in changed_refs:
+            print(f"  updated: {path}")
         return
 
     before = sum(p.stat().st_size for p in pngs)
