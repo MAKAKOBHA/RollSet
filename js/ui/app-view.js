@@ -68,7 +68,14 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
 
   document.addEventListener('click', (event) => {
     const button = event.target.closest('[data-action]');
-    if (!button || button.disabled) return;
+    if (!button || button.disabled) {
+      // У кнопки отправки имени нет data-action. Озвучиваем клавиатурную активацию.
+      if (event.detail === 0 && event.target.closest('#name-form button[type="submit"]')) {
+        sound.unlock();
+        sound.play('click');
+      }
+      return;
+    }
     // С мышью и пальцем звук играет сразу при нажатии (ниже); здесь — только нажатие с клавиатуры.
     if (event.detail === 0 && button.dataset.action !== 'rules-skip') sound.play('click');
     actions[button.dataset.action]?.(button);
@@ -90,7 +97,7 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
       }
 
       // Дальше звук кнопки играет в момент нажатия, а «пропустить» остаётся беззвучным.
-      const button = event.target.closest('[data-action]');
+      const button = event.target.closest('[data-action], #name-form button[type="submit"]');
       if (!button || button.disabled || button.dataset.action === 'rules-skip') return;
       sound.unlock();
       sound.play('click');

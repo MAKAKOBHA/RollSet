@@ -177,7 +177,9 @@
 .flip-inner {
   position: relative;
   aspect-ratio: var(--card-ratio);
+  transform: rotateY(0deg);
   transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
   transition: transform var(--flip-ms) var(--ease);
 }
 
@@ -193,6 +195,13 @@
   box-shadow: 0 10px 26px rgb(0 0 0 / 0.55);
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
+  transform-style: flat;
+}
+
+.flip-face .art,
+.flip-face .art img {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .flip-face .art {
@@ -200,8 +209,12 @@
   border-radius: inherit;
 }
 
+.flip-back {
+  transform: rotateY(0deg) translateZ(0.1px);
+}
+
 .flip-front {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(0.1px);
 }
 
 /* Расклад карт: падают сверху по очереди, с поворотом и лёгким отскоком */
