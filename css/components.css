@@ -632,3 +632,11 @@ dialog[open]::backdrop {
   color: var(--accent);
   opacity: 1;
 }
+
+
+/* На телефонах кнопка пропуска должна оставаться выше подписи в подвале. */
+@media (max-width: 600px) {
+  .skip-hint {
+    bottom: calc(5.75rem + env(safe-area-inset-bottom));
+  }
+}
