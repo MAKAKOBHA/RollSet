@@ -625,7 +625,12 @@ dialog[open]::backdrop {
   font: 400 0.8rem var(--font-body);
   opacity: 0.75;
   cursor: pointer;
-  transition: color 0.2s, opacity 0.2s;
+  transition: color 0.2s, opacity 0.7s;
+}
+
+.skip-hint.is-fading {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .skip-hint:hover {
