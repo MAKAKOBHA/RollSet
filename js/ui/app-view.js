@@ -40,6 +40,12 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
   nameInput.addEventListener('input', () => controller.setName(nameInput.value));
   $('#name-form').addEventListener('submit', (event) => {
     event.preventDefault();
+    // Кнопка отправки формы не имеет data-action: её щелчок озвучиваем отдельно.
+    // При отправке клавишей Enter тоже воспроизводим один щелчок.
+    if (event.submitter?.matches('button[type="submit"]') || !event.submitter) {
+      sound.unlock();
+      sound.play('click');
+    }
     controller.submitName();
   });
 
