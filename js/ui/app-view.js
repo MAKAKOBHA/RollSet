@@ -44,8 +44,7 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
     // Начинаем звук раскладывания непосредственно после успешного подтверждения имени.
     if (controller.getState().phase === P.CHOOSE) {
       sound.unlock();
-      // После формы звук уже запущен; при других переходах к выбору запускаем здесь.
-      if (previous !== 'name') sound.play('deal');
+      sound.play('deal');
     }
   });
 
@@ -201,7 +200,8 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
     for (const [key, node] of screens) node.hidden = key !== name;
     if (name === 'choose' && previous !== 'choose') {
       chooseView.dealIn();
-      sound.play('deal');
+      // При переходе с формы звук уже запущен непосредственно в submit.
+      if (previous !== 'name') sound.play('deal');
     }
     if (firstTime) return;
     if (slow) {
