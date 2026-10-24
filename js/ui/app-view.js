@@ -73,24 +73,32 @@ export function mountApp({ store, controller, cards, skills, sheetService, confi
     actions[button.dataset.action]?.(button);
   });
 
-  // Звук кнопки — в момент нажатия, а не отпускания: так он не запаздывает. «пропустить» — без звука.
+  // Первый клик/тап по странице только разблокирует звук и сам же проигрывает щелчок.
+  // Это работает и по пустому месту; первый клик по кнопке не дублируется.
+  let firstPointerHandled = false;
   document.addEventListener(
     'pointerdown',
     (event) => {
       if (event.pointerType === 'mouse' && event.button !== 0) return;
+
+      if (!firstPointerHandled) {
+        firstPointerHandled = true;
+        sound.unlock();
+        sound.play('click');
+        return;
+      }
+
+      // Дальше звук кнопки играет в момент нажатия, а «пропустить» остаётся беззвучным.
       const button = event.target.closest('[data-action]');
       if (!button || button.disabled || button.dataset.action === 'rules-skip') return;
-      // Разблокируем аудиоконтекст до play: иначе первый клик (в том числе «Начать») теряется.
       sound.unlock();
       sound.play('click');
     },
     true,
   );
 
-  // Браузеры разрешают звук только после касания страницы: первое касание включает звуки и фон.
-  const unlockSound = () => sound.unlock();
-  document.addEventListener('pointerdown', unlockSound, { capture: true, once: true });
-  document.addEventListener('keydown', unlockSound, { capture: true, once: true });
+  // Клавиатурное взаимодействие тоже разблокирует аудиоконтекст.
+  document.addEventListener('keydown', () => sound.unlock(), { capture: true, once: true });
 
   const soundToggle = $('#sound-toggle');
   const syncSoundToggle = (muted) => {
